@@ -1,0 +1,52 @@
+<% layout("/layouts/boilerplate.ejs") %>
+  <div class="row mt-3">
+    <div class="col-8 offset-2">
+    <h2>EDIT YOUR LISTING</h2>
+     <form method="post" 
+     action="/listings/<%=listing._id%>?_method=PUT"
+     enctype="multipart/form-data">
+       
+       <div class="mb-3">
+        <label for="listings[title]" class="form-label">Title:</label>
+        <input type="text" id="title" name="title" value="<%= listing.title %>" class="form-control">
+        </div>
+        <div class="mb-3">
+        <label for="listings[description]" class="form-label">Description:</label>
+       <textarea id="description" name="description" class="form-control" > <%= listing.description %> </textarea>
+     </div>  
+
+     <div class="mb-3">
+      <h3>original listing image</h3>
+   <img 
+  src="<%= listing.image.url.replace('/upload/', '/upload/w_300,h_250,c_fill/') %>"
+  style="width:300px; height:250px; object-fit:cover;"
+>
+
+      
+     </div>
+
+     <div class="mb-3">
+        <label for="listings[image] " 
+        class="form-label">upload new Image </label>
+        <input name="listing[image]"
+        value="<%= listing.image %>" type="file" 
+        class="form-control">
+         </div>
+<div class="row">
+         <div class="mb-3 col-4">
+        <label for="listings[price]" class="form-label">Price:</label>
+        <input type="number" value="<%=listing.price%>"  class="form-control"  id="price" name="price" >
+        </div>
+
+        <div class="mb-3 col-8">
+        <label for="listings[location]" class="form-label">Location:</label>
+        <input type="text" value="<%=listing.location%>" id="location" class="form-control" name="location" >
+        </div> 
+</div>
+       <div class="mb-3">
+        <label for="listings[country]" class="form-label">Country:</label>
+        <input type="text" value="<%=listing.country%>" class="form-control" id="country" name="country" >
+       </div>
+        <button type="submit" class="btn btn-dark edit-btn mt-3">EDIT</button>
+</div>
+</div>

@@ -1,0 +1,209 @@
+body{
+  font-family: "Lexend", sans-serif !important;
+  font-optical-sizing: auto !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  display:flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container{
+    flex:1;
+}
+
+h1{
+    text-align:center;
+    color: rgb(255, 105, 97);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+h2{
+    text-align: center;
+    color: rgb(255, 105, 97);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+
+.navbar{
+    background-color: rgb(255, 255, 255);
+   height: 5rem;
+}
+
+.fa-compass{
+    color: #fe424d;
+    font-size: 2rem;
+    margin-left: 1rem;
+    margin-top: 1rem;
+}
+
+.nav-link{
+    color:black !important;
+    font-size: 1.2rem;
+    font-weight: 600 !important;
+}
+.footer-space{
+    background-color: rgb(206, 206, 206) !important;
+    margin-top: 2rem;
+    text-align: center;
+    padding-top: 1rem 0;
+    text-decoration: none;
+    color: black;
+    font-weight: 600 !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.footer-space footer{
+    max-width:1200px;
+    margin: 0 auto;
+}
+
+.f-info{
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 0.5rem;
+}
+.socials{
+    font-size: 1.5rem !important;
+        background-color: rgb(206, 206, 206);
+        display:flex;
+        gap:1rem;
+        justify-content: center;
+        margin-top: 0.5rem;
+        
+}
+.fa-brands:hover{
+    text-decoration: underline;
+    color: #fe424d!important;
+}
+
+.fa-brands{
+    margin : 0.5rem !important;
+}
+
+.f-info-links{
+    margin:0 0.5rem;
+    text-decoration: none !important;  
+    color: black !important;
+    justify-content: center !important;
+}
+
+
+.f-info-links a:hover {
+    color: #fe424d;
+    text-decoration: underline;
+}
+
+/* Flex container for sticky footer */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Content expands and pushes footer */
+.content-wrap {
+  flex: 1;
+}
+
+/* cards */
+.listing-card{
+    border: none !important;
+    margin-bottom: 2rem;
+}
+
+.card-img-top{
+    border-radius: 1rem !important;
+    width: 100% !important;
+    object-fit: cover !important;
+}
+
+.card-body{
+    padding:0 !important;
+
+}
+
+.card-text p{
+    font-weight: 400 !important;
+}
+
+.listing-link{
+    color:black;
+    text-decoration: none;
+}
+
+/* card-effects */
+
+.card-img-overlay{
+    opacity:0;
+}
+
+.card-img-overlay:hover{
+    opacity:0.2;
+    background-color: white;
+}
+
+.btn-dark{
+    background-color: #fe424d;
+    border:none;
+}
+
+.btn-dark:hover{
+    background-color: #bf131e;
+    box-shadow: rgb(196, 85, 85);
+    border:2px rgb(0, 0, 0) !important;
+}
+
+
+/* show page */
+.show-img{
+    height:30vh;
+}
+
+/* Base container */
+.btns {
+  display: flex;
+  gap: 20px;
+}
+
+/* Base styles */
+.edit-btn,
+.del-btn {
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white !important;
+}
+
+/* Default colors */
+.edit-btn {
+  background-color: #fe424d !important; /* Red */
+  margin-left:40px;
+  margin-bottom: 5px;
+}
+
+.del-btn {
+  background-color: black !important; /* Black */
+  margin-bottom: 5px;
+}
+
+/* When hovering on container (either button inside it) → swap colors */
+.btns:hover .edit-btn {
+  background-color: black !important;
+}
+
+.btns:hover .del-btn {
+  background-color: #fe424d !important;
+}
+
+
+/* error message */
+.alert-headline{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
