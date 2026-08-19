@@ -14,9 +14,6 @@ console.log(newReview);
   req.flash("success","new Review created" );
 
  res.redirect(`/listings/${listing._id}`)
-  console.log("review saved");
-  const {validateReview}=require("../middlewares/middleware.js")
-  
 };
 
 

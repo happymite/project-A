@@ -1,5 +1,6 @@
 const Listing = require("../models/listing");
 const {listingSchema} = require("../schema.js");
+const ExpressError = require("../utils/ExpressError.js");
 
 
 module.exports.index= async (req,res)=>{
@@ -38,9 +39,8 @@ module.exports.CreateListing = async (req, res, next) => {
 let result = listingSchema.validate(req.body);
 console.log(result);
 if(result.error){
-    throw new ExpressError(400 ,result.error)
+    throw new ExpressError(400 ,result.error.details.map(el => el.message).join(", "));
 };
-
 let url = req.file.path;
 let filename= req.file.filename;
 console.log(url,"..", filename);
@@ -71,7 +71,12 @@ console.log(url,"..", filename);
     throw new ExpressError(400, "INVALID DATA!! send valid data for listing")
    }
     let {id}=req.params;
-   let listing = await Listing.findByIdAndUpdate(id,{...req.body});
+   let listing = await Listing.findByIdAndUpdate(id,{...req.body}, {new: true, runValidators: true});
+
+    if(!listing){
+        req.flash("error","Listing you requested does not exist" );
+        return res.redirect("/listings");
+    }
 
     if(typeof req.file !== "undefined"){
         let url = req.file.path;

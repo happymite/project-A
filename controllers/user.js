@@ -1,6 +1,6 @@
 const User = require("../models/user.js");
 
-module.exports.signupUser = async(req,res)=>{
+module.exports.signupUser = async(req,res,next)=>{
     try{
  let {username, email, password}=req.body;
     const newUser = new User ({email,username});
@@ -16,6 +16,7 @@ module.exports.signupUser = async(req,res)=>{
     
     }catch(e){
         req.flash("error", e.message);
+        return next(e);
         res.redirect("./signup");
     }
    
@@ -30,9 +31,9 @@ module.exports.loginMessage= async(req,res)=>{
 
 
     module.exports.logoutuser=(req, res,next)=>{
-    req.logout((err)=>{
+   req.logout((err)=>{
         if(err){
-            next(err);
+            return next(err);
         }
         req.flash("success","you are logged out!");
         res.redirect("/listings");

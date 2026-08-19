@@ -10,7 +10,7 @@ const methodOverride = require('method-override');
 const ejsMate = require('ejs-mate');
 const ExpressError = require('./utils/ExpressError.js');
 const session=require('express-session');
-const {MongoStore} = require('connect-mongo');
+const MongoStore = require("connect-mongo").default;
 const flash = require("connect-flash");
 const passport = require("passport");
 const localStrategy = require("passport-local");
@@ -45,20 +45,19 @@ app.use(express.static(path.join(__dirname,'public')));
 const dbUrl = process.env.ATLAS_URL;
  
 const store = MongoStore.create({
-    mongoUrl: dbUrl,
-    crypto: {
-        secret: process.env.SESSION_SECRET,
-    },
-    touchAfter: 24 * 60 * 60
+  mongoUrl: dbUrl,
+  crypto: {
+    secret: process.env.SESSION_SECRET,
+  },
+  touchAfter: 24 * 60 * 60,
 });
-
 const sessionOptions = {
     store: store,
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
     cookie:{
-        expires: Date.now() + 7 * 24 *60 * 60 * 1000,
+       expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         maxAge : 7 * 24 * 60 * 60 * 1000,
     },
 };
@@ -77,10 +76,13 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.use((req,res,next)=>{
+app.use((req, res, next) => {
+
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     res.locals.currUser = req.user;
+
+
     next();
 });
 
@@ -100,14 +102,16 @@ app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter);
 app.use("/",userRouter);
 
-
-app.all("*", (req,res,next) => {
+app.use((req,res,next) => {
     next(new ExpressError(404,"PAGE NOT FOUND !!"))
 });
 
 app.use((err, req, res, next) => {
     let {statusCode=500, message="Something Went Wrong !!"}= err;
-    res.render("error.ejs",{err});
+    if(!err.message){
+        err.message = message;
+    }
+    res.status(statusCode).render("error.ejs",{err});
 });
 
 app.listen(8080,()=>{

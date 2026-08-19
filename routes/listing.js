@@ -7,11 +7,8 @@ const {isLoggedIn,isOwner,validateListing}=require("../middlewares/middleware.js
 
 
 const  listingController = require("../controllers/listing.js");
-const multer= require('multer');
+const { storage } = require("../cloudconfig.js");
 const upload = require("../middlewares/uploads");  // or the correct path
-
-
-
 
 
 

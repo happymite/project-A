@@ -1,8 +1,6 @@
-const { text } = require("express");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Review = require("./review.js");
-
 const listingSchema = new Schema({
   title: String,
   description: String,
@@ -17,10 +15,11 @@ const listingSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Review"
 }],
-owner:{
-  type: Schema.Types.ObjectId,
-  ref:"User",
-},
+category: ["mountains","beach","city","desert","forest","countryside", "island" ,"lake","river","other"],
+  owner:{
+    type: Schema.Types.ObjectId,
+    ref:"User",
+  },
 });
 
 listingSchema.post("findOneAndDelete", async(listing)=>{

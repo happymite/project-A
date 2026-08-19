@@ -8,7 +8,7 @@ const { signupUser, loginMessage, logoutuser } = require("../controllers/user.js
 
 router.route("/signup")
 .get((req,res)=>{
-    res.render("./users/signup.ejs")
+    res.render("users/signup")
 })
 .post( wrapAsync(signupUser));
 
@@ -16,7 +16,7 @@ router.route("/signup")
 
 router.route("/login")
 .get( (req,res)=>{
-    res.render("users/login.ejs")
+    res.render("users/login")
 })
 .post(
     saveRedirectUrl,
