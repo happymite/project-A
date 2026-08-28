@@ -41,9 +41,11 @@ console.log(result);
 if(result.error){
     throw new ExpressError(400 ,result.error.details.map(el => el.message).join(", "));
 };
-let url = req.file.path;
-let filename= req.file.filename;
-console.log(url,"..", filename);
+if (!req.file) {
+            throw new ExpressError(400, "Please add a cover image for your listing.");
+        }
+        let url = req.file.path;
+        let filename = req.file.filename;
         const newListing = new Listing(req.body);
         newListing.owner = req.user._id;
         newListing.image = {url,filename};

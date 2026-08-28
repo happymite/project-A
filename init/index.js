@@ -1,30 +1,40 @@
-const mongoose = require('mongoose');
-const initData=require('./data.js');
+if (process.env.NODE_ENV !== "production") {
+  require("dotenv").config();
+}
+
+const mongoose = require("mongoose");
+const initData = require("./data.js");
 const Listing = require("../models/listing.js");
+const User = require("../models/user.js");
 
+const dbUrl = process.env.ATLAS_URL || "mongodb://127.0.0.1:27017/vegabond";
+const shouldReset = process.argv.includes("--reset");
 
-main()
-.then(()=>{
-    console.log("Connected to MongoDB");
-}).catch((err)=>{
-    console.log(err);
-});
+async function initDB() {
+  await mongoose.connect(dbUrl);
 
-async function main(){
-    
-await mongoose.connect("mongodb://127.0.0.1:27017/vegabond");
-};
+  const existingCount = await Listing.countDocuments();
+  if (existingCount > 0 && !shouldReset) {
+    console.log("Database already contains listings. Run `node init/index.js --reset` to replace them.");
+    return;
+  }
 
+  if (shouldReset) {
+    await Listing.deleteMany({});
+  }
 
+  const owner = await User.findOne();
+  const listings = initData.data.map((listing) => ({
+    ...listing,
+    ...(owner ? { owner: owner._id } : {}),
+  }));
+  await Listing.insertMany(listings);
+  console.log(`Database initialized with ${listings.length} listings.`);
+}
 
-
-
-
-const initDB=async()=>{
-   await Listing.deleteMany({});
-  initData.data= initData.data.map((obj)=>({...obj,owner:"690b7e875f7f1bd1bc10f4b5"}));
-   await Listing.insertMany(initData.data);
-   console.log ("Database Initialized");
-};
-
-initDB();
+initDB()
+  .catch((error) => {
+    console.error("Database initialization failed:", error.message);
+    process.exitCode = 1;
+  })
+  .finally(() => mongoose.disconnect());

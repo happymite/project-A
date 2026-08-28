@@ -7,7 +7,7 @@
     <div class="card listing-card col-6 offset-3" >
   <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="...">
   <div class="card-body">
-    <p class="card-text">Owned by: <i><%= listing.owner.username%></i></p><br>
+    <p class="card-text">Owned by: <i><%= listing.owner ? listing.owner.username : "VegaBond host" %></i></p><br>
   
         
         <li>Description: <%= listing.description %></li><br>
@@ -19,7 +19,7 @@
 </div>
 
 
-<% if(currUser && listing.owner._id.equals(currUser._id)){%> 
+<% if(currUser && listing.owner && listing.owner._id.equals(currUser._id)){%> 
 
 <div class="btns row">
     <div class="col-3 offset-2">
@@ -60,7 +60,7 @@
          <% for(review of listing.reviews){%>
   <div class="card col-5 ms-3 mb-3 mb-sm-1">
     <div class="card-body">
-        <h5 class="card-title">@<i><%= review.author.username%></i></h5>
+        <h5 class="card-title">@<i><%= review.author ? review.author.username : "guest" %></i></h5>
         <p class="card-text"><%= review.comment %></p>
         <p class="card-text"><%= review.rating %>⭐</p>
 <form class="mb-3"
