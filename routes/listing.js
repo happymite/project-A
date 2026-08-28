@@ -23,6 +23,9 @@ router.route("/")
     wrapAsync(listingController.CreateListing)
 );
 
+// AI-assisted listing copy. The API key stays server-side in OPENAI_API_KEY.
+router.post("/ai/draft", isLoggedIn, wrapAsync(listingController.generateDraft));
+
 
 //new route
 router.get("/new",isLoggedIn,

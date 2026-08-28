@@ -4,9 +4,32 @@ const ExpressError = require("../utils/ExpressError.js");
 
 
 module.exports.index= async (req,res)=>{
-  const alllistings =  await Listing.find({});
-  res.render("listings/index.ejs",{alllistings});
+  const { q = "", category = "" } = req.query;
+  const query = {};
+  if (q.trim()) {
+    const pattern = new RegExp(q.trim(), "i");
+    query.$or = [{ title: pattern }, { location: pattern }, { country: pattern }, { description: pattern }];
+  }
+  if (category) query.category = category;
+  const alllistings = await Listing.find(query).sort({ _id: -1 });
+  res.render("listings/index.ejs", { alllistings, q, category });
 };
+
+// module.exports.generateDraft = async (req, res) => {
+//   const { title = "", location = "", country = "", vibe = "" } = req.body;
+//   if (!process.env.OPENAI_API_KEY) {
+//     return res.status(503).json({ error: "AI is not configured yet. Add OPENAI_API_KEY to your environment and restart the server." });
+//   }
+//   const prompt = `Write a warm, specific short vacation-rental description (90-120 words). Avoid hype and invented claims. Property title: ${title}. Location: ${location}, ${country}. Desired feel: ${vibe || "welcoming and memorable"}. Return only the description.`;
+//   const response = await fetch("https://api.openai.com/v1/responses", {
+//     method: "POST",
+//     headers: { "Content-Type": "application/json", Authorization: `Bearer ${process.env.OPENAI_API_KEY}` },
+//     body: JSON.stringify({ model: process.env.OPENAI_MODEL || "gpt-4.1-mini", input: prompt })
+//   });
+//   const data = await response.json();
+//   if (!response.ok) throw new ExpressError(response.status, data.error?.message || "Could not create AI copy");
+//   res.json({ description: data.output_text?.trim() || "" });
+// };
 
 
 
@@ -37,15 +60,13 @@ module.exports.ShowListing = async (req,res)=>{
 
 module.exports.CreateListing = async (req, res, next) => {
 let result = listingSchema.validate(req.body);
-console.log(result);
 if(result.error){
     throw new ExpressError(400 ,result.error.details.map(el => el.message).join(", "));
 };
-if (!req.file) {
+        if (!req.file) {
             throw new ExpressError(400, "Please add a cover image for your listing.");
         }
-        let url = req.file.path;
-        let filename = req.file.filename;
+       let { path: url, filename } = req.file;
         const newListing = new Listing(req.body);
         newListing.owner = req.user._id;
         newListing.image = {url,filename};

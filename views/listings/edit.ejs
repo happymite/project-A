@@ -1,10 +1,10 @@
 <% layout("/layouts/boilerplate.ejs") %>
-  <div class="row mt-3">
-    <div class="col-8 offset-2">
-    <h2>EDIT YOUR LISTING</h2>
+  <section class="form-page">
+    <p class="eyebrow">HOST DASHBOARD</p>
+    <h1>Refine your listing.</h1>
      <form method="post" 
      action="/listings/<%=listing._id%>?_method=PUT"
-     enctype="multipart/form-data">
+     enctype="multipart/form-data" class="listing-form">
        
        <div class="mb-3">
         <label for="listings[title]" class="form-label">Title:</label>
@@ -28,7 +28,7 @@
      <div class="mb-3">
         <label for="listings[image] " 
         class="form-label">upload new Image </label>
-        <input name="listing[image]"
+        <input name="image"
         type="file" 
         class="form-control">
          </div>
@@ -47,6 +47,7 @@
         <label for="listings[country]" class="form-label">Country:</label>
         <input type="text" value="<%=listing.country%>" class="form-control" id="country" name="country" >
        </div>
-        <button type="submit" class="btn btn-dark edit-btn mt-3">EDIT</button>
-</div>
-</div>
+       <div class="mb-3"><label for="category" class="form-label">Category:</label><select class="form-select" id="category" name="category"><% ['other','beach','mountains','city','countryside','forest','island','lake'].forEach(item => { %><option value="<%= item %>" <%= listing.category === item ? 'selected' : '' %>><%= item[0].toUpperCase()+item.slice(1) %></option><% }) %></select></div>
+        <button type="submit" class="btn btn-dark mt-3">Save changes</button>
+</form>
+</section>

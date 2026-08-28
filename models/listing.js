@@ -15,7 +15,7 @@ const listingSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Review"
 }],
-category: ["mountains","beach","city","desert","forest","countryside", "island" ,"lake","river","other"],
+  category: { type: String, default: "other", enum: ["mountains","beach","city","desert","forest","countryside", "island" ,"lake","river","other"] },
   owner:{
     type: Schema.Types.ObjectId,
     ref:"User",

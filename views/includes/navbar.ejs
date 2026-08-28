@@ -1,52 +1,27 @@
-<style>
- .search-inp {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 2rem;
-  padding:0.5rem 3rem 0.5rem 3rem;
-  margin:0 3rem 0 3rem; 
-}
-.btn-search {
-  border-radius: 2rem;
-  background-color:#fe424d; ;
-  color: white;
-  padding: 0 1.5rem 0 1.5rem;
-  border: none;
-}
-.btn-search:hover {
-  background-color: #fe424d;
-  color: white;
-}
-
-</style>
-<nav class="navbar navbar-expand-md bg-body-light border-bottom sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/listings"><i class="fa-regular fa-compass"></i></a>
+<nav class="navbar navbar-expand-md sticky-top">
+  <div class="container site-shell">
+    <a class="navbar-brand" href="/listings"><span class="brand-mark">V</span><span>vegabond</span></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link" href="/listings">Explore</a>
         </li>
       </ul>
 
-      <div class="navbar-nav search-inp ms-auto">
-         <form class="d-flex" role="search">
-      <input class="form-control me-2 search-inp" type="search" placeholder="Search destination"/>
-      <button class="btn btn-search" type="submit">Search</button>
-    </form>
-      </div>
-
-      <ul class="navbar-nav ms-auto">
+      <form class="nav-search" role="search" action="/listings" method="GET">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input type="search" name="q" placeholder="Search a city, stay, or mood" aria-label="Search listings">
+      </form>
+      <ul class="navbar-nav ms-md-3">
           <li class="nav-item">
-          <a class="nav-link" href="/listings/new">Add your Listing</a>
+          <a class="nav-link host-link" href="/listings/new">List your space</a>
         </li>
      <% if (!locals.currUser) { %>
         <li class="nav-item">
-          <a class="nav-link "  href="/signup">signup</a>
+          <a class="nav-link"  href="/signup">Sign up</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/login">Login</a>

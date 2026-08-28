@@ -1,53 +1,19 @@
 <% layout("/layouts/boilerplate.ejs") %>
-        <div class="row mt-3">
-          <div class="col-8 offset-2">
-            <h2 class="mb-4">Create New Listing</h2>
-            <!-- currently bootstrap custom styles form class="needs-validation" and novalidate is not accessible therefore we are using browser defaults error message for form submission -->
-            <form method="POST" action="/listings"
-             enctype="multipart/form-data">   
-              <div class="mb-3">
-                <label class="form-label">Title</label>
-                <input type="text"
-                       name="title"
-                       class="form-control"
-                       required>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Upload image</label>
-                <input type="file"
-                       class="form-control"
-                       name="image">
-              required      
-              </div>
-
-    <div class="mb-3">
-      <label class="form-label">Description</label>
-      <textarea class="form-control" rows="3" name="description" required></textarea>
-    </div>
-<div class="row">
-    <div class="mb-3 col-4" >
-      <label class="form-label">Price</label>
-     <input type="number"
-         name="price"
-         class="form-control" required>
-         </div>
-    <div class="mb-3 col-8">
-      <label class="form-label">Location</label>
-       <input type="text"
-         name="location"
-         class="form-control" required>
-        </div>
-</div>
-    <div class="mb-3">
-      <label class="form-label">Country</label>
-      <input type="text"  
-      name="country" 
-      class="form-control" 
-      id="country"
-      required>
-    </div>
-    <button type="submit" class="btn btn-dark mt-3">Create Listing</button>
+<section class="form-page">
+  <p class="eyebrow">HOST WITH VEGABOND</p>
+  <h1>Share your special place.</h1>
+  <p class="intro">Build a considered listing, then let our writing assistant help you find the right words.</p>
+  <form method="POST" action="/listings" enctype="multipart/form-data" class="listing-form">
+    <div class="mb-3"><label class="form-label" for="title">Listing title</label><input type="text" name="title" id="title" class="form-control" required></div>
+    <div class="mb-3"><label class="form-label" for="image">Cover image</label><input type="file" class="form-control" name="image" id="image" accept="image/*" required></div>
+    <div class="ai-panel"><h3><i class="fa-solid fa-wand-magic-sparkles"></i> VegaBond AI writing assistant</h3><p>Generate a polished first draft from the details you enter. You remain in control of every word.</p><button type="button" id="draft-button" class="btn btn-dark">Create description</button><span id="ai-status" class="ai-status"></span></div>
+    <div class="mb-3"><label class="form-label" for="description">Description</label><textarea class="form-control" rows="6" name="description" id="description" required></textarea></div>
+    <div class="row"><div class="mb-3 col-md-4"><label class="form-label" for="price">Nightly price (₹)</label><input type="number" min="0" name="price" id="price" class="form-control" required></div><div class="mb-3 col-md-8"><label class="form-label" for="location">Location</label><input type="text" name="location" id="location" class="form-control" required></div></div>
+    <div class="mb-3"><label class="form-label" for="country">Country</label><input type="text" name="country" class="form-control" id="country" required></div>
+    <div class="mb-4"><label class="form-label" for="category">Best fit</label><select class="form-select" name="category" id="category"><option value="other">Choose a category</option><option value="beach">Beach</option><option value="mountains">Mountains</option><option value="city">City</option><option value="countryside">Countryside</option><option value="forest">Forest</option><option value="island">Island</option><option value="lake">Lake</option></select></div>
+    <button type="submit" class="btn btn-dark">Publish listing <i class="fa-solid fa-arrow-right ms-1"></i></button>
   </form>
-</div>
- </div>
- 
+</section>
+<script>
+document.getElementById('draft-button').addEventListener('click', async () => { const status=document.getElementById('ai-status'), button=document.getElementById('draft-button'); button.disabled=true; status.textContent='Creating your draft…'; try { const response=await fetch('/listings/ai/draft',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:title.value,location:location.value,country:country.value,vibe:category.value})}); const data=await response.json(); if(!response.ok) throw new Error(data.error); description.value=data.description; status.textContent='Draft ready — make it your own.'; } catch (error) { status.textContent=error.message || 'Could not create a draft.'; } finally { button.disabled=false; } });
+</script>
