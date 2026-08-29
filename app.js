@@ -1,4 +1,4 @@
-console.log("RUNNING FROM:", __filename);
+
 if(process.env.NODE_ENV != "production"){
     require('dotenv').config();
 };
