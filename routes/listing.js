@@ -2,8 +2,7 @@ const express = require("express");
 const router = express.Router();
 const wrapAsync = require('../utils/wrapAsync.js');
 const Listing = require("../models/listing");
-const {listingSchema} = require("../schema.js");
-const {isLoggedIn,isOwner,validateListing}=require("../middlewares/middleware.js");
+const {isLoggedIn, isOwner, isHost, validateListing} = require("../middlewares/middleware.js");
 
 
 const  listingController = require("../controllers/listing.js");
@@ -13,41 +12,33 @@ const upload = require("../middlewares/uploads");  // or the correct path
 
 
 
+
 router.route("/")
-// index route 
 .get(wrapAsync(listingController.index))
-// create route
 .post(
     isLoggedIn,
-   upload.single('image'), validateListing,
+    isHost,
+    upload.single('image'), validateListing,
     wrapAsync(listingController.CreateListing)
 );
 
-// AI-assisted listing copy. The API key stays server-side in OPENAI_API_KEY.
-router.post("/ai/draft", isLoggedIn, wrapAsync(listingController.generateDraft));
-
-
-//new route
-router.get("/new",isLoggedIn,
+router.get("/new", isLoggedIn, isHost,
     listingController.renderNewForm);
-//edit route
-router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.EditListing));
 
-
+router.get("/:id/edit", isLoggedIn, isHost, isOwner, wrapAsync(listingController.EditListing));
 
 router.route("/:id")
-// show route
-.get( wrapAsync(listingController.ShowListing))
-//update route
+.get(wrapAsync(listingController.ShowListing))
 .put(isLoggedIn,
+    isHost,
     isOwner,
     upload.single("listing[image]"),
     validateListing,
-     wrapAsync(listingController.updateListing))
-//delete route
+    wrapAsync(listingController.updateListing))
 .delete(isLoggedIn,
+    isHost,
     isOwner,
     wrapAsync(listingController.deleteListing)
 );
 
-module.exports=router;
+module.exports = router;

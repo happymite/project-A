@@ -6,7 +6,7 @@ const Review = require('../models/review.js');
 module.exports.isLoggedIn= (req,res,next)=>{
     if(!req.isAuthenticated()){
 
-        // If the request is DELETE or PUT, redirect to the safe GET page instead
+    
         if(req.method !== "GET"){
             const id = req.params.id;
             req.session.redirectUrl = `/listings/${id}`;
@@ -45,9 +45,6 @@ module.exports.isOwner = async(req,res,next)=>{
 };
 
 
-
-
-
 module.exports.validateListing =(req, res ,next)=>{
     let {error}= listingSchema.validate(req.body);
     if(error){
@@ -59,8 +56,6 @@ module.exports.validateListing =(req, res ,next)=>{
 };
 
 
-
-
 module.exports.validateReview =(req, res ,next)=>{
     let {error}= reviewSchema.validate(req.body);
     if(error){
@@ -70,7 +65,6 @@ module.exports.validateReview =(req, res ,next)=>{
         next();
     }
 };
-
 
 module.exports.isreviewAuthor = async(req,res,next)=>{
     let {id,reviewId}=req.params;
@@ -85,6 +79,15 @@ module.exports.isreviewAuthor = async(req,res,next)=>{
     }
     next();
 };
+
+
+module.exports.isHost = async(req,res,next)=>{
+    if(!req.user.isHost||!req.user){
+        req.flash("error", "You must be a host to perform this action");
+        return res.redirect("/listings");
+    }
+    next();
+}
 
 
 

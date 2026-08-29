@@ -16,8 +16,9 @@ module.exports.signupUser = async(req,res,next)=>{
     
     }catch(e){
         req.flash("error", e.message);
-        return next(e);
         res.redirect("./signup");
+        return next(e);
+        
     }
    
 };
@@ -29,6 +30,15 @@ module.exports.loginMessage= async(req,res)=>{
         res.redirect(redirectUrl);
     };
 
+    module.exports.becomeHost = async (req, res) => {
+    await User.findByIdAndUpdate(req.user._id, {
+        isHost: true,
+        hostSince: Date.now(),
+    });
+    req.flash("success", "You're now a host! Start listing your property.");
+    res.redirect("/listings/new");
+};
+
 
     module.exports.logoutuser=(req, res,next)=>{
    req.logout((err)=>{
@@ -39,3 +49,4 @@ module.exports.loginMessage= async(req,res)=>{
         res.redirect("/listings");
     });
 };
+

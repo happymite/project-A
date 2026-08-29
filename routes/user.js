@@ -1,10 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const User = require("../models/user.js");
 const wrapAsync = require("../utils/wrapAsync.js");
 const passport = require("passport");
 const { saveRedirectUrl } = require("../middlewares/middleware.js");
-const { signupUser, loginMessage, logoutuser } = require("../controllers/user.js");
+const { signupUser, loginMessage, logoutuser, becomeHost } = require("../controllers/user.js");
+console.log("becomeHost is:", typeof becomeHost); // add this line
+const { isLoggedIn } = require("../middlewares/middleware.js");
+
+
 
 router.route("/signup")
 .get((req,res)=>{
@@ -26,6 +29,14 @@ router.route("/login")
     }),
     loginMessage,
 );
+
+
+router.route("/become-host")
+.get(isLoggedIn, (req,res)=>{
+    res.render("users/become-host");
+})
+.post(isLoggedIn, wrapAsync(becomeHost));
+
 
 
 router.get("/logout",logoutuser);

@@ -1,10 +1,203 @@
 <% layout("/layouts/boilerplate.ejs") %>
+
 <article class="detail-wrap">
-  <p class="eyebrow"><%= listing.category || 'CURATED STAY' %></p>
-  <h1 class="detail-title"><%= listing.title %></h1>
-  <p class="detail-meta"><i class="fa-solid fa-location-dot"></i> <%= listing.location %>, <%= listing.country %> &nbsp; · &nbsp; Hosted by <strong><%= listing.owner ? listing.owner.username : 'VegaBond host' %></strong></p>
-  <img src="<%= listing.image.url %>" class="show-img mt-4" alt="<%= listing.title %>">
-  <div class="detail-main"><div><h2 class="h4 mb-3">A place to settle in.</h2><p class="detail-description"><%= listing.description %></p><hr class="my-4"><h3 class="h5">Guest notes (<%= listing.reviews.length %>)</h3><div class="row mt-3"><% for (let review of listing.reviews) { %><div class="col-md-6 mb-3"><div class="card p-3 h-100"><strong>@<%= review.author ? review.author.username : 'guest' %></strong><p class="small my-2"><%= review.comment %></p><span class="small">★ <%= review.rating %>/5</span><% if (currUser && review.author && review.author._id.equals(currUser._id)) { %><form method="POST" action="/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE" class="mt-2"><button class="btn btn-sm btn-outline-dark">Remove</button></form><% } %></div></div><% } %></div>
-  <% if (currUser) { %><hr class="my-4"><h3 class="h5">Leave a guest note</h3><form method="POST" action="/listings/<%= listing.id %>/reviews" class="mt-3"><div class="mb-3"><label for="rating" class="form-label">Rating</label><input type="range" min="1" max="5" value="5" id="rating" class="form-range" name="review[rating]"></div><div class="mb-3"><label for="comment" class="form-label">Your experience</label><textarea name="review[comment]" id="comment" rows="4" class="form-control" required></textarea></div><button class="btn btn-dark">Post review</button></form><% } %></div>
-  <aside class="stay-facts"><p class="eyebrow">FROM</p><h2 class="mb-4">₹<%= Number(listing.price).toLocaleString('en-IN') %><small class="text-muted fs-6 fw-normal"> / night</small></h2><p><i class="fa-solid fa-sparkles me-2"></i>Distinctive, independently hosted stay</p><p><i class="fa-solid fa-location-dot me-2"></i><%= listing.location %>, <%= listing.country %></p><hr><p class="small text-muted">A thoughtful stay starts with the details. Contact the host to plan your visit.</p><% if(currUser && listing.owner && listing.owner._id.equals(currUser._id)){ %><a href="/listings/<%=listing._id%>/edit" class="button-primary">Edit listing</a><form method="POST" action="/listings/<%=listing._id%>?_method=DELETE" class="d-inline"><button class="btn btn-link text-danger small">Delete</button></form><% } %></aside></div>
+    <p class="eyebrow">
+        <%= listing.category || "CURATED STAY" %>
+    </p>
+
+    <h1 class="detail-title">
+        <%= listing.title %>
+    </h1>
+
+    <p class="detail-meta">
+        <i class="fa-solid fa-location-dot"></i>
+        <%= listing.location %>, <%= listing.country %>
+        &nbsp; · &nbsp;
+        Hosted by
+        <strong>
+            <%= listing.owner ? listing.owner.username : "VegaBond host" %>
+        </strong>
+    </p>
+
+    <img
+        src="<%= listing.image.url %>"
+        class="show-img mt-4"
+        alt="<%= listing.title %>"
+    >
+
+    <div class="detail-main">
+
+        <!-- Main Content -->
+        <div>
+            <h2 class="h4 mb-3">
+                A place to settle in.
+            </h2>
+
+            <p class="detail-description">
+                <%= listing.description %>
+            </p>
+
+            <hr class="my-4">
+
+            <h3 class="h5">
+                Guest notes (<%= listing.reviews.length %>)
+            </h3>
+
+            <div class="row mt-3">
+                <% for (let review of listing.reviews) { %>
+
+                    <div class="col-md-6 mb-3">
+                        <div class="card p-3 h-100">
+
+                            <strong>
+                                @<%= review.author ? review.author.username : "guest" %>
+                            </strong>
+
+                            <p class="small my-2">
+                                <%= review.comment %>
+                            </p>
+
+                            <span class="small">
+                                ★ <%= review.rating %>/5
+                            </span>
+
+                            <% if (
+                                currUser &&
+                                review.author &&
+                                review.author._id.equals(currUser._id)
+                            ) { %>
+
+                                <form
+                                    method="POST"
+                                    action="/listings/<%= listing._id %>/reviews/<%= review._id %>?_method=DELETE"
+                                    class="mt-2"
+                                >
+                                    <button class="btn btn-sm btn-outline-dark">
+                                        Remove
+                                    </button>
+                                </form>
+
+                            <% } %>
+
+                        </div>
+                    </div>
+
+                <% } %>
+            </div>
+
+            <!-- Review Form -->
+            <% if (
+                currUser &&
+                !(listing.owner && listing.owner._id.equals(currUser._id))
+            ) { %>
+
+                <hr class="my-4">
+
+                <h3 class="h5">
+                    Leave a guest note
+                </h3>
+
+                <form
+                    method="POST"
+                    action="/listings/<%= listing.id %>/reviews"
+                    class="mt-3"
+                >
+
+                    <div class="mb-3">
+                        <label for="rating" class="form-label">
+                            Rating
+                        </label>
+
+                        <input
+                            type="range"
+                            min="1"
+                            max="5"
+                            value="5"
+                            id="rating"
+                            class="form-range"
+                            name="review[rating]"
+                        >
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="comment" class="form-label">
+                            Your experience
+                        </label>
+
+                        <textarea
+                            name="review[comment]"
+                            id="comment"
+                            rows="4"
+                            class="form-control"
+                            required
+                        ></textarea>
+                    </div>
+
+                    <button class="btn btn-dark">
+                        Post review
+                    </button>
+
+                </form>
+
+            <% } %>
+
+        </div>
+
+        <!-- Stay Facts / Sidebar -->
+        <aside class="stay-facts">
+
+            <p class="eyebrow">
+                FROM
+            </p>
+
+            <h2 class="mb-4">
+                ₹<%= Number(listing.price).toLocaleString("en-IN") %>
+                <small class="text-muted fs-6 fw-normal">
+                    / night
+                </small>
+            </h2>
+
+            <p>
+                <i class="fa-solid fa-sparkles me-2"></i>
+                Distinctive, independently hosted stay
+            </p>
+
+            <p>
+                <i class="fa-solid fa-location-dot me-2"></i>
+                <%= listing.location %>, <%= listing.country %>
+            </p>
+
+            <hr>
+
+            <p class="small text-muted">
+                A thoughtful stay starts with the details.
+                Contact the host to plan your visit.
+            </p>
+
+            <!-- Owner Controls -->
+            <% if (
+                currUser &&
+                listing.owner &&
+                listing.owner._id.equals(currUser._id)
+            ) { %>
+<button class="btn btn-dark mb-2"
+ onclick="window.location.href='/listings/<%= listing._id %>/edit'">
+ Edit Listing
+ </button>
+            
+                <form
+                    method="POST"
+                    action="/listings/<%= listing._id %>?_method=DELETE"
+                    class="d-inline"
+                >
+                    <button class="btn btn-link text-danger small">
+                        Delete
+                    </button>
+                </form>
+
+            <% } %>
+
+        </aside>
+
+    </div>
 </article>
