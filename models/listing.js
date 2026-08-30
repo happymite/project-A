@@ -4,23 +4,27 @@ const Review = require("./review.js");
 const listingSchema = new Schema({
   title: String,
   description: String,
-  image:{
+  image: {
     url: String,
     filename: String,
-  } ,
+  },
   price: Number,
   location: String,
   country: String,
-  reviews:[{
-    type: Schema.Types.ObjectId,
-    ref: "Review"
-}],
-  category: { type: String, default: "other", enum: ["mountains","beach","city","desert","forest","countryside", "island" ,"lake","river","other"] },
-  owner:{
-    type: Schema.Types.ObjectId,
-    ref:"User",
+  category: {
+    type: String,
+    default: "other",
+    enum: ["mountains", "beach", "city", "desert", "forest", "countryside", "island", "lake", "river"],
   },
-});
+  reviews: [{
+    type: Schema.Types.ObjectId,
+    ref: "Review",
+  }],
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+}, { timestamps: true });
 
 listingSchema.post("findOneAndDelete", async(listing)=>{
   await Review.deleteMany({_id:  {$in:listing.reviews}});

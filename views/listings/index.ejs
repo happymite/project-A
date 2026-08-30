@@ -1,21 +1,205 @@
 <% layout("/layouts/boilerplate.ejs") %>
 <section class="discover-hero">
-  <p class="eyebrow">CURATED GETAWAYS · INDIA & BEYOND</p>
-  <h1>Find the stay<br>that changes your pace.</h1>
-  <p>Thoughtful homes, distinctive hosts, and room for a better kind of trip.</p>
+    <p class="eyebrow">CURATED GETAWAYS · INDIA & BEYOND</p>
+    <h1>
+        Find the stay<br>
+        that changes your pace.
+    </h1>
+    <p>
+        Thoughtful homes, distinctive hosts, and room for a better kind of trip.
+    </p>
 </section>
 <div class="browse-bar">
-  <form action="/listings" method="GET" class="category-list">
-    <% const categories = [{key:'',label:'Everywhere',icon:'fa-compass'},{key:'beach',label:'Coast',icon:'fa-umbrella-beach'},{key:'mountains',label:'Mountains',icon:'fa-mountain-sun'},{key:'city',label:'Cities',icon:'fa-city'},{key:'countryside',label:'Countryside',icon:'fa-tree'},{key:'forest',label:'Forest',icon:'fa-leaf'},{key:'island',label:'Islands',icon:'fa-water'}]; %>
-    <% categories.forEach(item => { %><button name="category" value="<%= item.key %>" class="category-chip <%= category === item.key ? 'is-active' : '' %>"><i class="fa-solid <%= item.icon %>"></i><span><%= item.label %></span></button><% }) %>
-  </form>
-  <label class="tax-toggle"><input type="checkbox" id="tax-toggle"><span>Show total with taxes</span></label>
+    <form action="/listings" method="GET" class="category-list">
+      <% if(sort) { %>
+        <input type="hidden"
+        name="sort"
+        value="<%= sort %>">
+      <% } %>
+        <% 
+            const categories = [
+                {
+                    key: '',
+                    label: 'Everywhere',
+                    icon: 'fa-compass'
+                },
+                {
+                    key: 'beach',
+                    label: 'Coast',
+                    icon: 'fa-umbrella-beach'
+                },
+                {
+                    key: 'mountains',
+                    label: 'Mountains',
+                    icon: 'fa-mountain-sun'
+                },
+                {
+                    key: 'city',
+                    label: 'Cities',
+                    icon: 'fa-city'
+                },
+                {
+                    key: 'countryside',
+                    label: 'Countryside',
+                    icon: 'fa-tree'
+                },
+                {
+                    key: 'forest',
+                    label: 'Forest',
+                    icon: 'fa-leaf'
+                },
+                {
+                    key: 'island',
+                    label: 'Islands',
+                    icon: 'fa-water'
+                }
+            ];
+        %>
+
+     <% categories.forEach(item => { %>
+    <button
+        name="category"
+        value="<%= item.key %>"
+        class="category-chip <%= currentCategory === (item.key|| "all" )? 'is-active' : '' %>">
+        <i class="fa-solid <%= item.icon %>"></i>
+        <span><%= item.label %></span>
+    </button>
+<% }) %>
+    </form>
+    <label class="tax-toggle">
+        <input type="checkbox" id="tax-toggle">
+        <span>Show total with taxes</span>
+    </label>
 </div>
-<section class="results-heading"><div><p class="eyebrow">DISCOVER</p><h2><%= q ? `Results for “${q}”` : category ? `${category[0].toUpperCase() + category.slice(1)} escapes` : 'Spaces with character' %></h2></div><span><%= alllistings.length %> stays</span></section>
-<% if (!alllistings.length) { %><div class="empty-state"><i class="fa-regular fa-compass"></i><h3>No stays found yet</h3><p>Try another destination or browse everywhere.</p><a href="/listings" class="button-primary">Browse all stays</a></div><% } %>
-<div class="listing-grid">
-<% for (let listing of alllistings) { %>
-  <a href="/listings/<%= listing._id %>" class="listing-link"><article class="listing-card"><div class="listing-image"><img src="<%= listing.image.url %>" alt="<%= listing.title %>"><span class="save-button"><i class="fa-regular fa-bookmark"></i></span><span class="category-tag"><%= listing.category || 'stay' %></span></div><div class="listing-copy"><div><h3><%= listing.title %></h3><p><%= listing.location %>, <%= listing.country %></p></div><p class="listing-price">₹<%= Number(listing.price).toLocaleString('en-IN') %><small>/ night</small><span class="tax-info"> · ₹<%= Math.round(listing.price * 1.18).toLocaleString('en-IN') %> total</span></p></div></article></a>
+
+<section class="results-heading">
+
+    <div>
+        <p class="eyebrow">DISCOVER</p>
+
+        <h2>
+            <% if (currentCategory !== "all") { %>
+
+                <%= currentCategory[0].toUpperCase() + currentCategory.slice(1) %> escapes
+
+            <% } else { %>
+
+                Spaces with character
+
+            <% } %>
+        </h2>
+    </div>
+    <span>
+        <%= alllistings.length %> stays
+    </span>
+</section>
+
+<% if (!alllistings.length) { %>
+
+    <div class="empty-state">
+        <i class="fa-regular fa-compass"></i>
+
+        <h3>No stays found yet</h3>
+
+        <p>
+            Try another destination or browse everywhere.
+        </p>
+
+        <a href="/listings" class="button-primary">
+            Browse all stays
+        </a>
+    </div>
+
 <% } %>
+  <div class="d-flex justify-content-end mb-3">
+    <form
+        method="GET"
+        action="/listings"
+        class="d-flex align-items-center gap-3">
+        <% if (currentCategory !== "all") { %>
+            <input
+                type="hidden"
+                name="category"
+                value="<%= currentCategory %>">
+        <% } %>
+        <select
+            name="sort"
+            id="sort"
+            class="form-select form-select-sm"
+            onchange="this.form.submit()">
+            <option
+                value="newest"
+                <%= sort === "newest" ? "selected" : "" %>>
+                Newest
+            </option>
+            <option
+                value="oldest"
+                <%= sort === "oldest" ? "selected" : "" %>>
+                Oldest
+            </option>
+            <option
+                value="price-asc"
+                <%= sort === "price-asc" ? "selected" : "" %>>
+                Price: Low to High
+            </option>
+            <option
+                value="price-desc"
+                <%= sort === "price-desc" ? "selected" : "" %>>
+                Price: High to Low
+            </option>
+        </select>
+    </form>
 </div>
-<script>document.getElementById('tax-toggle').addEventListener('change', e => document.body.classList.toggle('show-tax', e.target.checked));</script>
+
+<div class="listing-grid">
+    <% for (let listing of alllistings) { %>
+        <a
+            href="/listings/<%= listing._id %>"
+            class="listing-link">
+            <article class="listing-card">
+                <div class="listing-image">
+                    <img
+                        src="<%= listing.image.url %>"
+                        alt="<%= listing.title %>">
+                    <span class="save-button">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </span>
+                    <span class="category-tag">
+                        <%= listing.category || 'stay' %>
+                    </span>
+                </div>
+                <div class="listing-copy">
+                    <div>
+                        <h3>
+                            <%= listing.title %>
+                        </h3>
+                        <p>
+                            <%= listing.location %>, <%= listing.country %>
+                        </p>
+                    </div>
+                    <p class="listing-price">
+                        ₹<%= Number(listing.price).toLocaleString('en-IN') %>
+                        <small>/ night</small>
+                        <span class="tax-info">
+                            · ₹<%= Math.round(listing.price * 1.18).toLocaleString('en-IN') %> total
+                        </span>
+                    </p>
+                </div>
+            </article>
+        </a>
+    <% } %>
+</div>
+     
+
+<script>
+    document
+        .getElementById('tax-toggle')
+        .addEventListener('change', e => {
+            document.body.classList.toggle(
+                'show-tax',
+                e.target.checked
+            );
+        });
+
+
+</script>

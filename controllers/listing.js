@@ -35,11 +35,8 @@ module.exports.index= async (req,res)=>{
 
 
 module.exports.renderNewForm = (req,res)=>{
-   
     res.render("listings/new.ejs");
 };
-
-
 module.exports.ShowListing = async (req,res)=>{
     let {id}=req.params;
     const listing=await Listing.findById(id)
@@ -56,9 +53,7 @@ module.exports.ShowListing = async (req,res)=>{
     res.render("listings/show.ejs",{listing});
 };
 
-
-
-module.exports.CreateListing = async (req, res, next) => {
+module.exports.CreateListing = async (req, res) => {
 let result = listingSchema.validate(req.body);
 if(result.error){
     throw new ExpressError(400 ,result.error.details.map(el => el.message).join(", "));
@@ -87,8 +82,6 @@ if(result.error){
       originalImageurl =  originalImageurl.replace('/upload/', '/upload/w_300,h_250,c_fill/');
         res.render("listings/edit.ejs",{listing, originalImageurl});
     };
-
-
     module.exports.updateListing = async (req,res)=>{
        if(!req.body){
     throw new ExpressError(400, "INVALID DATA!! send valid data for listing")
@@ -117,4 +110,33 @@ module.exports.deleteListing = async (req,res)=>{
     await Listing.findByIdAndDelete(id);
     req.flash("success","listing deleted" );
     res.redirect("/listings");
+};
+
+
+module.exports.index = async (req, res) => {
+    const { category, sort } = req.query;
+    const filter = {};
+    // Category filter
+    if (category && category !== "all") {
+        filter.category = category;
+    }
+    // Sorting
+    let sortOption = {};
+    if (sort === "priceAsc") {
+        sortOption.price = 1;
+    } else if (sort === "priceDesc") {
+        sortOption.price = -1;
+    } else if (sort === "newest") {
+        sortOption.createdAt = -1;
+    }
+    // Fetch listings
+    const alllistings = await Listing
+        .find(filter)
+        .sort(sortOption);
+    // Render page
+    res.render("listings/index.ejs", {
+        alllistings,
+        currentCategory: category || "all",
+        sort: sort || "newest"
+    });
 };
