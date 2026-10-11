@@ -1,0 +1,28 @@
+<% layout("/layouts/boilerplate.ejs") %>
+
+<section class="form-page">
+  <p class="eyebrow">RESERVE YOUR STAY</p>
+  <h1><%= listing.title %></h1>
+  <p class="intro">₹<%= Number(listing.price).toLocaleString("en-IN") %> per night · up to <%= listing.maxGuests %> guest<%= listing.maxGuests === 1 ? "" : "s" %></p>
+
+  <form method="POST" action="/listings/<%= listing._id %>/book" class="listing-form">
+    <div class="row">
+      <div class="mb-3 col-md-6">
+        <label class="form-label" for="checkIn">Check-in</label>
+        <input class="form-control" type="date" id="checkIn" name="checkIn" min="<%= today %>" required>
+      </div>
+      <div class="mb-3 col-md-6">
+        <label class="form-label" for="checkOut">Check-out</label>
+        <input class="form-control" type="date" id="checkOut" name="checkOut" min="<%= today %>" required>
+      </div>
+    </div>
+
+    <div class="mb-4">
+      <label class="form-label" for="guestCount">Guests</label>
+      <input class="form-control" type="number" id="guestCount" name="guestCount" min="1" max="<%= listing.maxGuests %>" step="1" value="1" required>
+    </div>
+
+    <p class="small text-muted">A pending booking blocks these dates while payment is added in a later phase. GST is 18%.</p>
+    <button class="btn btn-dark">Reserve dates <i class="fa-solid fa-arrow-right ms-1"></i></button>
+  </form>
+</section>

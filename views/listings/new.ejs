@@ -21,7 +21,13 @@
         <label class="form-label" for="price">Nightly price (₹)</label>
         <input type="number" min="0" name="price" id="price" class="form-control" required>
       </div>
-      <div class="mb-3 col-md-8">
+      <div class="mb-3 col-md-4">
+        <label class="form-label" for="maxGuests">Maximum guests</label>
+        <input type="number" min="1" max="15" step="1" name="maxGuests" id="maxGuests" class="form-control"  
+        value="<%= typeof listing !== 'undefined' && listing.maxGuests ? listing.maxGuests : 2%>" required>
+
+      </div>
+      <div class="mb-3 col-md-4">
         <label class="form-label" for="location">Location</label>
         <input type="text" name="location" id="location" class="form-control" required>
       </div>

@@ -9,6 +9,18 @@ const listingSchema = new Schema({
     filename: String,
   },
   price: Number,
+  maxGuests: {
+    type: Number,
+    min: 1,
+    default: 1,
+  },
+  // Every booking transaction updates this field. It makes overlapping
+  // reservations for one listing contend on a shared database document.
+  bookingLockVersion: {
+    type: Number,
+    default: 0,
+    select: false,
+  },
   location: String,
   country: String,
   category: {

@@ -22,6 +22,7 @@ const User = require("./models/user.js");
 const reviewsRouter = require("./routes/review.js");
 const listingsRouter=require("./routes/listing.js");
 const userRouter= require("./routes/user.js");
+const bookingRouter = require("./routes/booking.js");
 
 app.engine('ejs', ejsMate); 
 
@@ -101,6 +102,7 @@ async function main(){
 
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter);
+app.use("/", bookingRouter);
 app.use("/",userRouter);
 
 app.use((req,res,next) => {

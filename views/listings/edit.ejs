@@ -38,7 +38,12 @@
         <input type="number" value="<%=listing.price%>"  class="form-control"  id="price" name="price" >
         </div>
 
-        <div class="mb-3 col-8">
+        <div class="mb-3 col-4">
+        <label for="maxGuests" class="form-label">Maximum guests:</label>
+        <input type="number" min="1" max="15" step="1" value="<%=typeof listing !== 'undefined' && listing.maxGuests ? listing.maxGuests : 2%>" class="form-control" id="maxGuests" name="maxGuests" required>
+        </div>
+
+        <div class="mb-3 col-4">
         <label for="listings[location]" class="form-label">Location:</label>
         <input type="text" value="<%=listing.location%>" id="location" class="form-control" name="location" >
         </div> 
