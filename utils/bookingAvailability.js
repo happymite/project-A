@@ -16,3 +16,5 @@ async function isListingAvailable({ listingId, checkIn, checkOut, session }) {
 }
 
 module.exports = { isListingAvailable };
+
+

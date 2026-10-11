@@ -40,7 +40,7 @@
 
         <div class="mb-3 col-4">
         <label for="maxGuests" class="form-label">Maximum guests:</label>
-        <input type="number" min="1" max="15" step="1" value="<%=typeof listing !== 'undefined' && listing.maxGuests ? listing.maxGuests : 2%>" class="form-control" id="maxGuests" name="maxGuests" required>
+        <input type="number" min="1" max="15" step="1" value="<%=typeof listing !== 'undefined' && listing.maxGuests ? listing.maxGuests : 15 %>" class="form-control" id="maxGuests" name="maxGuests" required>
         </div>
 
         <div class="mb-3 col-4">
